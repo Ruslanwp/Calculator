@@ -4,16 +4,18 @@ import React from 'react'
 interface Props {
   button: string,
   type: string,
-  onButtonClick: (type: string, button: string) => void,
+  handler: (title: string) => void,
 }
 
+
 export const Button: React.FC<Props> = (props) => {
-  const { button, type, onButtonClick } = props;
+  const { button, type, handler } = props;
   return (
     <div
       className="operators__operator operator"
       onClick={() => {
-        onButtonClick(type, button);
+        console.log(button);
+        handler(button)
       }}
     >
       {button}
@@ -24,5 +26,5 @@ export const Button: React.FC<Props> = (props) => {
 Button.propTypes = {
   button: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  onButtonClick: PropTypes.func.isRequired,
+  handler: PropTypes.func.isRequired,
 }

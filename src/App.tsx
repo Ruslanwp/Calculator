@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from './Button';
 import './App.css';
 
@@ -13,6 +12,7 @@ enum ButtonType {
   Add = 'add',
   Equal = 'equal',
   Modulo = 'modulo',
+  Dot = 'dot',
 }
 
 interface Button {
@@ -76,191 +76,118 @@ const buttons = [
     type: ButtonType.Number,
   },
   {
-    title: '0',
-    value: 0,
-    type: ButtonType.Number,
+    title: '+',
+    type: ButtonType.Add,
   },
+  
   {
     title: '%',
     type: ButtonType.Modulo,
   },
   {
-    title: 'Clear',
-    type: ButtonType.Reset,
+    title: '0',
+    value: 0,
+    type: ButtonType.Number,
   },
-
   {
-    title: 'AC',
-    type: ButtonType.Remove,
+    title: '=',
+    type: ButtonType.Equal,
   },
   {
     title: '-',
     type: ButtonType.Subtract,
   },
   {
-    title: '+',
-    type: ButtonType.Add,
+    title: 'AC',
+    type: ButtonType.Remove,
+  },
+  
+  {
+    title: 'Clear',
+    type: ButtonType.Reset,
   },
   {
-    title: '=',
-    type: ButtonType.Equal,
+    title: '.',
+    type: ButtonType.Dot,
   },
-
 ];
 
 const App: React.FC = () => {
   const [result, setResult] = useState('');
-  const [memory, setMemory] = useState<number>(0)
+  const [memory, setMemory] = useState(0)
   const [operator, setOperator] = useState('');
 
-  console.log(result, operator, memory);
-  
-  const handleButtonPress = (type: string, value: string) => {
-    let num = parseFloat(result)
+  const handlerByButtonType: Record<ButtonType, (str: string) => void> = {
+    [ButtonType.Number]: (str) => {
+      setResult(state => state + str)
+    },
 
-    if (isNaN(num)) {
-      num = 1
-    }
-
-    console.log(num);
-    
-
-    if (type === 'number') {
-      setResult(state => state + value)
-    }
-
-    if (type === 'remove') {
-      setResult('')
-      return;
-    }
-
-    if (type === 'reset') {
-      setResult(result.slice(0, -1))
-      return;
-    }
-
-    if (type === 'modulo') {
-      setResult((num / 100).toString())
-      return;
-    }
-
-    if (type === 'add') {
-      if (operator && !result) {
-        if (operator === '+') {
-          setMemory(memory + num)
-        } else if (operator === '-') {
-          setMemory(memory - num)
-        } else if (operator === '/') {
-          setMemory(memory / num)
-        } else if (operator === '*') {
-          setMemory(num * memory)
-        }
-      } else {
-        setMemory(num);
+    [ButtonType.Remove]: () =>  setResult(result.slice(0, -1)),
+    [ButtonType.Reset]: () => setResult(''),
+    [ButtonType.Modulo]: () => setResult((Number(result) / 100).toString()),
+    [ButtonType.Dot]: (str) => {
+      if (!result.includes(str)) {
+        setResult(state => state + str)
       }
-
-
-      setOperator('+')
-      setResult('')
-      return;
-    }
-
-    if (type === 'subtract') {
-      if (operator) {
-        if (operator === '+') {
-          setMemory(memory + num)
-        } else if (operator === '-') {
-          console.log('haha');
-          
-          setMemory(memory - num)
-        } else if (operator === '/') {
-          setMemory(memory / num)
-        } else if (operator === '*') {
-          setMemory(num * memory)
-        }
-      } else {
-        setMemory(num);
-      }
-
-      setOperator('-')
-      setResult('')
-      return;
-    }
-
-    if (type === 'multiply') {
-      
-      if (operator && !result) {
-        if (operator === '+') {
-          setMemory(memory + num)
-        } else if (operator === '-') {
-          // console.log('haha');
-          
-          setMemory(memory - num)
-        } else if (operator === '/') {
-          setMemory(memory / num)
-        } else if (operator === '*') {
-          setMemory(num * memory)
-        }
-      } else {
-        setMemory(num);
-      }
-
-
+    },
+    [ButtonType.Multiply]: () => {
       setOperator('*')
+      setMemory(+result)
       setResult('')
-      return;
-    }
+    },
 
-    if (type === 'divide') {
-      if (operator && !result) {
-        if (operator === '+') {
-          setMemory(memory + num)
-        } else if (operator === '-') {
-          setMemory(memory - num)
-        } else if (operator === '/') {
-          setMemory(memory / num)
-        } else if (operator === '*') {
-          setMemory(num * memory)
-        }
-      } else {
-        setMemory(num);
-      }
-
+    [ButtonType.Divide]: () => {
       setOperator('/')
+      setMemory(+result)
       setResult('')
-      return;
-    }
+    },
 
-    if (type === 'equal') {
-      if (!operator) return;
+    [ButtonType.Subtract]: () => {
+      setOperator('-')
+      setMemory(+result)
+      setResult('')
+    },
 
-      if (operator === '+') {
-        setResult(`${memory + num}`.toString())
-      } else if (operator === '-') {
-        console.log('haha');
-        console.log(num);
-        console.log(memory);
-        
-        
-        setResult(`${memory - num}`.toString())
-      } else if (operator === '/') {
-        setResult(`${memory / num}`.toString())
-      } else if (operator === '*') {
-        setResult(`${num * memory}`.toString())
+    [ButtonType.Add]: () => {
+      setOperator('+')
+      setMemory(+result)
+      setResult('')
+    },
+
+    [ButtonType.Equal]: () => {
+      switch (operator) {
+        case '+':
+        setResult((memory + Number(result)).toString());
+        setMemory(+result);
+        break;
+
+        case '-':
+        setResult((memory - Number(result)).toString());
+        setMemory(+result);
+        break;
+
+        case '*':
+        setResult((memory * Number(result)).toString());
+        setMemory(+result);
+        break;
+
+        case '/':
+        setResult((memory / Number(result)).toString());
+        setMemory(+result);
+        break;
+
+        default: setResult(result);
       }
-
-      setOperator('')
-    }
-  }
+    },
+  };
 
   return (
   <div className="wrapper">
   <div className="result">{result}</div>
-
     <div className="calculator">
       {buttons.map(button => (
         <Button 
-          onButtonClick={handleButtonPress}
+          handler={handlerByButtonType[button.type]}
           key={button.title}
           button={button.title}
           type={button.type}
@@ -273,5 +200,3 @@ const App: React.FC = () => {
 }
 
 export default App;
-
-
