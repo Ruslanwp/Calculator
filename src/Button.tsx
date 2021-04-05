@@ -7,24 +7,20 @@ interface Props {
   handler: (title: string) => void,
 }
 
-
 export const Button: React.FC<Props> = (props) => {
-  const { button, type, handler } = props;
+  const { button, handler } = props;
+
+  const handleButton = () => {
+    console.log(button);
+    handler(button)
+  }
+
   return (
     <div
       className="operators__operator operator"
-      onClick={() => {
-        console.log(button);
-        handler(button)
-      }}
+      onClick={handleButton}
     >
       {button}
     </div>
   );
-}
-
-Button.propTypes = {
-  button: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  handler: PropTypes.func.isRequired,
 }

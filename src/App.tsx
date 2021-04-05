@@ -131,71 +131,70 @@ const App: React.FC = () => {
       }
     },
     [ButtonType.Multiply]: () => {
-      setOperator('*')
-      setMemory(+result)
-      setResult('')
+      setOperator('*');
+      setMemory(+result);
+      setResult('');
     },
 
     [ButtonType.Divide]: () => {
-      setOperator('/')
-      setMemory(+result)
-      setResult('')
+      setOperator('/');
+      setMemory(+result);
+      setResult('');
     },
 
     [ButtonType.Subtract]: () => {
-      setOperator('-')
-      setMemory(+result)
-      setResult('')
+      setOperator('-');
+      setMemory(+result);
+      setResult('');
     },
 
     [ButtonType.Add]: () => {
-      setOperator('+')
-      setMemory(+result)
-      setResult('')
+      setOperator('+');
+      setMemory(+result);
+      setResult('');
     },
 
     [ButtonType.Equal]: () => {
       switch (operator) {
         case '+':
-        setResult((memory + Number(result)).toString());
-        setMemory(+result);
-        break;
+          setResult((memory + Number(result)).toString());
+          setMemory(+result);
+            break;
 
         case '-':
-        setResult((memory - Number(result)).toString());
-        setMemory(+result);
-        break;
+          setResult((memory - Number(result)).toString());
+          setMemory(+result);
+            break;
 
         case '*':
-        setResult((memory * Number(result)).toString());
-        setMemory(+result);
-        break;
+          setResult((memory * Number(result)).toString());
+          setMemory(+result);
+            break;
 
         case '/':
-        setResult((memory / Number(result)).toString());
-        setMemory(+result);
-        break;
+          setResult((memory / Number(result)).toString());
+          setMemory(+result);
+            break;
 
-        default: setResult(result);
+          default: setResult(result);
       }
     },
   };
 
   return (
-  <div className="wrapper">
-  <div className="result">{result}</div>
-    <div className="calculator">
-      {buttons.map(button => (
-        <Button 
-          handler={handlerByButtonType[button.type]}
-          key={button.title}
-          button={button.title}
-          type={button.type}
-        />
-      ))}
+    <div className="wrapper">
+    <div className="result">{result}</div>
+      <div className="calculator">
+        {buttons.map(button => (
+          <Button 
+            handler={handlerByButtonType[button.type]}
+            key={button.title}
+            button={button.title}
+            type={button.type}
+          />
+        ))}
+      </div>
     </div>
-
-  </div>
   );
 }
 

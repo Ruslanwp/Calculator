@@ -8,7 +8,6 @@
   justify-content: center;
   max-width: 416px;
   margin: 0 auto;
-  /* min-width: 90vw; */
 }
 
 .result {
@@ -21,29 +20,20 @@
 
 .calculator {
   display: grid;
-  /* justify-content: center; */
   grid-template-rows: repeat(5, 104px);
   grid-template-columns: repeat(4, 104px);
-  /* grid-template-areas: 
-  "reset reset reset operator"
-  "digit digit digit operator"
-  "digit digit digit operator"
-  "digit digit digit operator"
-  "digit digit digit operator" */
 }
 
 .operator {
   font-family:Arial, Helvetica, sans-serif;
   font-size: 30px;
+  background-color: gray;
   border: 2px solid black;
   text-align: center;
   line-height: 100px;
   cursor: pointer;
 }
 
-.reset {
-  background-color:darkorchid;
-  vertical-align: middle;
-  /* margin: 0 auto; */
-  /* justify-content: space-between; */
+.operator:hover {
+  background-color: khaki;
 }
